@@ -46,9 +46,23 @@ class MainCommand : CommandExecutor, TabCompleter {
                     sender.sendMessage("${Main.prefix}§cYou need to be a player to execute this command")
                     return false
                 }
-                sender.inventory.addItem(Main.instance.getInvisFrame(false)!!)
-                sender.sendMessage("${Main.prefix}§aYou have received an invisible item frame")
-                return true
+                if (args[1] == "norm") {
+                    try {
+                        sender.inventory.addItem(Main.instance.getInvisFrame(false)!!)
+                        sender.sendMessage("${Main.prefix}§aYou have received an invisible item frame")
+                        return true
+                    } catch (exception: IndexOutOfBoundsException) {
+                        Bukkit.getLogger().warning("Looks like the index array went out of bounds. My fault.")
+                        Bukkit.getLogger().warning("Here's the stacktrace: " + exception)
+                        sender.sendMessage("An error has occurred. Check the console for a stacktrace.")
+                        return false
+                    }
+                }
+                else if (args[1] == "glow") {
+                    sender.inventory.addItem(Main.instance.getGlowInvisFrame(false)!!)
+                    sender.sendMessage("You have received a glowing invisible item frame.")
+                    return true
+                }
             } else if (args[0] == "reload") {
                 Main.instance.unregisterRecipe()
                 Main.instance.server.pluginManager.getPlugin("AdvancedInvisibleItemframes")?.reloadConfig()
@@ -74,15 +88,37 @@ class MainCommand : CommandExecutor, TabCompleter {
                 sendHelp(sender)
                 return false
             }
+            /*
+            if (args[0] == "get") {
+                if (args[2] == "norm" && sender is Player) {
+                    sender.inventory.addItem(Main.instance.getInvisFrame(false)!!)
+                    sender.sendMessage("${Main.prefix}§aYou have received an invisible item frame")
+                    return true
+                } else {
+                    if (sender !is Player) {
+                        sender.sendMessage("Players only.")
+                        return false
+                    }
+                }
+            } else {
+                sendHelp(sender)
+                return false
+            }
+             */
         } else {
             sendHelp(sender)
             return false
         }
+        sendHelp(sender)
+        return false
     }
 
     override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): List<String> {
         if (args.size == 1) {
             return listOf("help", "recipe", "get", "reload", "amount").filter { it.startsWith(args[0]) }
+        }
+        if (args.size == 2) {
+            return listOf("norm", "glow").filter { it.startsWith(args[0]) }
         }
         return listOf()
     }
