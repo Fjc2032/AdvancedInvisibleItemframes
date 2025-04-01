@@ -70,6 +70,18 @@ class Main : JavaPlugin() {
                 // Add the recipe to the server
                 Bukkit.addRecipe(recipe)
         }
+        /*
+        fun registerGlowRecipe() {
+                if (config.getBoolean("crafting.enabled")) {
+                        val item: ItemStack = getGlowInvisFrame(true)!!
+                        val key = NamespacedKey(this, "glow_invisible_item_frame")
+                        val recipe = ShapedRecipe(key, item)
+
+                        recipe.shape(config.getStringList("crafting.shape")[0], config.getStringList("crafting.shape")[1], config.getStringList("crafting.shape")[2])
+                        recipe.setIngredient()
+                }
+        }
+         */
 
         fun unregisterRecipe() {
                 val key = NamespacedKey(this, "invisible_item_frame")
@@ -95,6 +107,38 @@ class Main : JavaPlugin() {
                                 Bukkit.getLogger().warning("The item name or amount is not set in the config.yml!")
                                 Bukkit.getLogger().severe("Please check your config.yml and correct the error or delete the entire file.")
                                 server.pluginManager.disablePlugin(this)
+                                return null
+                        }
+                }
+        }
+        fun getGlowInvisFrame(useAmount: Boolean): ItemStack? {
+                val amount = if (useAmount) config.getInt("crafting.amount") else 1
+                if (config.getBoolean("invisible-itemframe.enchanted")) {
+                        try {
+                                return ItemBuilder(Material.GLOW_ITEM_FRAME, amount)
+                                        .setInvisible()
+                                        .setName(ChatColor.translateAlternateColorCodes('&', "&eGlowing Invisible Item Frame")!!)
+                                        .addLoreLine(ChatColor.translateAlternateColorCodes('&', "&6&oA glowing variant of the Invisible Item Frame"))
+                                        .addEnchant(Enchantment.ARROW_DAMAGE, 1)
+                                        .addItemFlag(ItemFlag.HIDE_ENCHANTS)
+                                        .itemStack
+                        } catch (exception: NullPointerException) {
+                                Bukkit.getLogger().warning("It appears something is missing in the configuration.")
+                                Bukkit.getLogger().warning("Make sure nothing is missing in the file. Here's the stacktrace if you want it:")
+                                Bukkit.getLogger().warning(exception.toString())
+                                return null
+                        }
+                } else {
+                        try {
+                                return ItemBuilder(Material.GLOW_ITEM_FRAME, amount)
+                                        .setInvisible()
+                                        .setName(ChatColor.translateAlternateColorCodes('&', "&eGlowing Invisible Item Frame")!!)
+                                        .addLoreLine(ChatColor.translateAlternateColorCodes('&', "&6&oA glowing variant of the Invisible Item Frame"))
+                                        .itemStack
+                        } catch (exception: NullPointerException) {
+                                Bukkit.getLogger().warning("It appears something is missing in the configuration.")
+                                Bukkit.getLogger().warning("Make sure nothing is missing in the file. Here's the stacktrace if you want it:")
+                                Bukkit.getLogger().warning(exception.toString())
                                 return null
                         }
                 }
