@@ -63,7 +63,7 @@ class Main : JavaPlugin() {
                         } catch (e: NullPointerException) {
                                 Bukkit.getLogger().severe("Invalid material in config: ${split[1]}")
                                 Bukkit.getLogger().severe("Please check your config.yml and correct the error or delete the entire file.")
-                                server.pluginManager.disablePlugin(this)
+                                return
                         }
                 }
 
@@ -97,7 +97,6 @@ class Main : JavaPlugin() {
                         } catch (e: NullPointerException) {
                                 Bukkit.getLogger().warning("The item name or amount is not set in the config.yml!")
                                 Bukkit.getLogger().severe("Please check your config.yml and correct the error or delete the entire file.")
-                                server.pluginManager.disablePlugin(this)
                                 return null
                         }
                 } else {
@@ -106,7 +105,6 @@ class Main : JavaPlugin() {
                         } catch (e: NullPointerException) {
                                 Bukkit.getLogger().warning("The item name or amount is not set in the config.yml!")
                                 Bukkit.getLogger().severe("Please check your config.yml and correct the error or delete the entire file.")
-                                server.pluginManager.disablePlugin(this)
                                 return null
                         }
                 }
