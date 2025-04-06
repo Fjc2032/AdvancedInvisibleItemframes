@@ -57,13 +57,12 @@ class Main : JavaPlugin() {
                 // Set what the letters represent.
                 for (s: String in config.getStringList("crafting.ingredients")) {
                         val split = s.split(":").toMutableList()
-                        if (split[1] == "null") split[1] = "AIR"
+                        if (split[1] == "null") return //split[1] = "AIR"
                         try {
                                 recipe.setIngredient(split[0].toCharArray()[0], Material.getMaterial(split[1])!!)
                         } catch (e: NullPointerException) {
                                 Bukkit.getLogger().severe("Invalid material in config: ${split[1]}")
                                 Bukkit.getLogger().severe("Please check your config.yml and correct the error or delete the entire file.")
-                                return
                         }
                 }
 
